@@ -1,0 +1,72 @@
+#Image Downloader
+
+import sys
+import requests
+from urllib.parse import urlparse
+import os
+
+#Q2
+
+if "google.colab" in sys.modules:
+    # Create the directory if it doesn't exist
+    os.makedirs("calib_images", exist_ok=True)
+    
+    # Loop to download images
+    for i in range(1, 22):
+        im_url = f"https://raw.githubusercontent.com/TommyDragonKing/School/main/ME41006/Q2/{i}.jpg"
+        try:
+            response = requests.get(im_url)
+            response.raise_for_status()  # Check if the request was successful
+            
+            # Write the image to the 'IMG' folder
+            with open(f"calib_images/{i}.jpeg", "wb") as file:
+                file.write(response.content)
+                
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to download image {i}.jpeg: {e}")
+
+#Q3
+
+if "google.colab" in sys.modules:
+    # Create the directory if it doesn't exist
+    os.makedirs("stitch_images", exist_ok=True)
+    
+    # Loop to download images
+    for i in range(1, 9):
+        im_url = f"https://raw.githubusercontent.com/gongguhit/Perceptual_Robotics_learn_opencv/master/report_resources/Q3_stitching/tiago{i}.JPG"
+        try:
+            response = requests.get(im_url)
+            response.raise_for_status()  # Check if the request was successful
+            
+            # Write the image to the 'stitch_images' folder
+            with open(f"stitch_images/{i}.jpeg", "wb") as file:
+                file.write(response.content)
+                
+        except requests.exceptions.RequestException as e:
+            print(f"Failed to download image {i}.jpeg: {e}")
+
+
+#Q4~5
+
+if "google.colab" in sys.modules:
+    def download_from_web(url):
+        # Convert GitHub URL to raw content URL
+        if "github.com" in url:
+            url = url.replace("github.com", "raw.githubusercontent.com")
+            url = url.replace("/blob/", "/")
+
+        response = requests.get(url)
+        if response.status_code == 200:
+            # Extract the file name from the URL
+            file_name = urlparse(url).path.split("/")[-1]
+            with open(file_name, "wb") as file:
+                file.write(response.content)
+            print(f"Successfully downloaded: {file_name}")
+        else:
+            raise Exception(f"Failed to download the file. Status code: {response.status_code}")
+
+    # Original GitHub URLs
+    download_from_web("https://github.com/gongguhit/Perceptual_Robotics_learn_opencv/blob/14f43abae48e4c621575f4b389808dc3f2a7ff60/report_resources/Q4_disparity/view1.png")
+    download_from_web("https://github.com/gongguhit/Perceptual_Robotics_learn_opencv/blob/14f43abae48e4c621575f4b389808dc3f2a7ff60/report_resources/Q4_disparity/view2.png")
+    download_from_web("https://github.com/gongguhit/Perceptual_Robotics_learn_opencv/blob/14f43abae48e4c621575f4b389808dc3f2a7ff60/report_resources/Q5_contour/leaf.jpg")
+
